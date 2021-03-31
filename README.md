@@ -23,6 +23,8 @@ min( <ETH present in Wallet> , <12.5% of the reserve pool of uniswap pair> )  //
 ```
 Once the minimum is determined we will then check at liquity if we can redeem LUSD the amount of ETH swapped. If not , we will use the redeemableLUSD at liquity to determine the ETH used for swap.
 
+######Note: The smaller the percent of the uniswap pool we can use the better prices we can get, I have taken 12.5% of the pool for now because the poo reserves are small.
+
 ### How will it determine if there is an arbitrage opportunity ?
 
 We can determine the arbitrage opportunity by the following formula.
@@ -59,4 +61,9 @@ HTTPS_PROVIDER='https://kovan.infura.io/v3/API_KEY'
 ACCOUNT_ADDRESS='WALLET_ADDRESS_OF_THE_PRIVATE_KEY'
 ```
 
+# Testing 
 
+Tested by creating a price difference in uniswap and chainlink 
+
+Tx on block: https://kovan.etherscan.io/tx/0xe71c1f51a90a39088073e8b66a9880e1b2c766046c95e3aa3e1814eca7a3b527
+Converted 0.778 ETH to 0.833 ETH
