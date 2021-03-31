@@ -22,7 +22,6 @@ let subscription;
 let status;
 
 app.get('/', async (req, res) => {
-  console.log(process.env.FOO)
   res.send('Start arbitrage server by hitting url: <ip>:3000/subscribe' +
     '<br/>Unsubscribe by hitting url: <ip>:3000/unsubscribe')
 })

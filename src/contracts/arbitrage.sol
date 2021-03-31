@@ -69,6 +69,7 @@ contract arbitrage {
     }
     
     function getEthBack() external payable {
+        // Fail safe method incase the contract was used wrong.
         msg.sender.transfer(address(this).balance);
     }
 }
