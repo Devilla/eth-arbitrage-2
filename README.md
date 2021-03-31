@@ -1,5 +1,41 @@
 # liquity-arbitrage
 
+This project will perform an arbitrage of LUSD/ETH pair. This will be done by 2 steps
+1. Swap ETH for LUSD at uniswap 
+2. Redeem LUSD for ETH at liquity
+
+# Design
+
+The project has two main components , one is the node server and another is the smart contract. 
+
+The node server is responsible to keep a track of the prices of ETH at chainlink and at uniswap. When we notice a price difference where there is a possiblity of a profit from arbitrage it will trigger the smart contract to perform the arbitrage between uniswap and liquity smart contracts.
+
+### How is the amount of eth to be used for the arbitrage calculated ?
+
+We have three restrictions in place to determine the ETH that can be used for the arbitrage. 
+1) The ETH present in the arbitragers wallet
+2) The redeemable amount at liquity 
+3) The uniswap reserves in the LUSD/ETH pair
+
+We will first take the minimum of 
+```
+min( <ETH present in Wallet> , <12.5% of the reserve pool of uniswap pair> )  // We will not use a bigger percentage of the uniswap pool because it will impact the prices heavily
+```
+Once the minimum is determined we will then check at liquity if we can redeem LUSD the amount of ETH swapped. If not , we will use the redeemableLUSD at liquity to determine the ETH used for swap.
+
+### How will it determine if there is an arbitrage opportunity ?
+
+We can determine the arbitrage opportunity by the following formula.
+```
+profit = ETH_USED * (uniswapPrice/chainLinkPrice) * (1-redemptionFeePercentage) - GasCost
+```
+
+If we find that the profit is positive we will then invoke the smart contract.
+
+### What mechanism will be used to make sure the server can be run 24/7 ?
+
+To run the server 24/7 we will need a poller mechanism which will continously monitor the prices. To do this , this project will subscribe to the new block headers generated in the ethereum chain. This is done considering uniswap prices are updated after every block is mined.
+
 # How to start
 
 Run the following commands
@@ -9,4 +45,18 @@ Run the following commands
 ```
 
 After this add your private keys and wallet addresses to .env file.
+
+#### To start the server:
+```
+yarn start
+```
+
+#### Sample `.env` file
+```
+PRIVATE_KEY='PVT_KEY_FROM_WALLET'
+WSS_PROVIDER='wss://kovan.infura.io/ws/v3/API_KEY'
+HTTPS_PROVIDER='https://kovan.infura.io/v3/API_KEY'
+ACCOUNT_ADDRESS='WALLET_ADDRESS_OF_THE_PRIVATE_KEY'
+```
+
 
