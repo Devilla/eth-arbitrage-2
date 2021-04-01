@@ -8,11 +8,11 @@ This project will perform an arbitrage of LUSD/ETH pair. This will be done by 2 
 
 The project has two main components , one is the node server and another is the smart contract. 
 
-The node server is responsible to keep a track of the prices of ETH at chainlink and at uniswap. When we notice a price difference where there is a possiblity of a profit from arbitrage it will trigger the smart contract to perform the arbitrage between uniswap and liquity smart contracts.
+The node server is responsible for keeping a track of the prices of ETH at chainlink and at uniswap. When we notice a price difference where there is a possiblity of a profit from arbitrage it will trigger the smart contract to perform the arbitrage between uniswap and liquity smart contracts.
 
 ### How is the amount of eth to be used for the arbitrage calculated ?
 
-We have three restrictions in place to determine the ETH that can be used for the arbitrage. 
+We have three restrictions in determining the ETH that can be used for the arbitrage. 
 1) The ETH present in the arbitragers wallet
 2) The redeemable amount at liquity 
 3) The uniswap reserves in the LUSD/ETH pair
@@ -23,7 +23,7 @@ min( <ETH present in Wallet> , <12.5% of the reserve pool of uniswap pair> )  //
 ```
 Once the minimum is determined we will then check at liquity if we can redeem LUSD the amount of ETH swapped. If not , we will use the redeemableLUSD at liquity to determine the ETH used for swap.
 
-######Note: The smaller the percent of the uniswap pool we can use the better prices we can get, I have taken 12.5% of the pool for now because the poo reserves are small.
+######Note: The smaller the percent of the uniswap pool we can use the better prices we can get, I have taken 12.5% of the pool for now because the pool reserves are small.
 
 ### How will it determine if there is an arbitrage opportunity ?
 
@@ -54,7 +54,7 @@ yarn start
 ```
 Once the server is started you will need to ping `localhost:3000/subscribe` to start polling for prices. Without subscribing to events , the arbitrage bot will not work.
 
-You can unsubscribe from the ethereum events by hitting localhost:3000/unsubscribe.
+You can unsubscribe from the ethereum events by hitting `localhost:3000/unsubscribe`.
 
 #### Sample `.env` file
 ```
@@ -69,4 +69,7 @@ ACCOUNT_ADDRESS='WALLET_ADDRESS_OF_THE_PRIVATE_KEY'
 Tested by creating a price difference in uniswap and chainlink 
 
 Tx on block: https://kovan.etherscan.io/tx/0xe71c1f51a90a39088073e8b66a9880e1b2c766046c95e3aa3e1814eca7a3b527
-Converted 0.778 ETH to 0.833 ETH
+Converted 0.778 ETH to 0.833 ETH  ( 0.778 was choosen based on the wallet balance )
+
+Tx on block: https://kovan.etherscan.io/tx/0xc544d95f30b02e606f33d08c394b73ed1832d278e813fdde93236f6aaf8fd755
+Converted 1.01 eth to 1.05 eth & 900(wei) LUSD (1.01 eth was choosen based on the uniswap pool reserve )
