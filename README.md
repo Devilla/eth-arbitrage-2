@@ -23,7 +23,7 @@ min( <ETH present in Wallet> , <12.5% of the reserve pool of uniswap pair> )  //
 ```
 Once the minimum is determined we will then check at liquity if we can redeem LUSD the amount of ETH swapped. If not , we will use the redeemableLUSD at liquity to determine the ETH used for swap.
 
-######Note: The smaller the percent of the uniswap pool we can use the better prices we can get, I have taken 12.5% of the pool for now because the pool reserves are small.
+###### Note: The smaller the percent of the uniswap pool we can use the better prices we can get, I have taken 12.5% of the pool for now because the pool reserves are small.
 
 ### How will it determine if there is an arbitrage opportunity ?
 
@@ -55,6 +55,8 @@ yarn start
 Once the server is started you will need to ping `localhost:3000/subscribe` to start polling for prices. Without subscribing to events , the arbitrage bot will not work.
 
 You can unsubscribe from the ethereum events by hitting `localhost:3000/unsubscribe`.
+
+###### Note: We use redeemLUSD function to determine the input values for the smart contract inputs, to run the redeemLUSD we need LUSD present in our wallet before performing the arbitrage. So keep a amount of LUSD equivalent to the ETH in your wallet or the amount being arbitraged for. 
 
 #### Sample `.env` file
 ```
