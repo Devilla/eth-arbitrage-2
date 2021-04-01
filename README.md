@@ -56,7 +56,7 @@ Once the server is started you will need to ping `localhost:3000/subscribe` to s
 
 You can unsubscribe from the ethereum events by hitting `localhost:3000/unsubscribe`.
 
-###### Note: We use redeemLUSD function to determine the input values for the smart contract inputs, to run the redeemLUSD we need LUSD present in our wallet before performing the arbitrage. So keep a amount of LUSD equivalent to the ETH in your wallet or the amount being arbitraged for. 
+###### Note: We use redeemLUSD function to determine the input values for the smart contract inputs, to run the redeemLUSD we need LUSD present in our wallet. So keep a amount of LUSD equivalent to the ETH in your wallet or the amount being arbitraged for. 
 
 #### Sample `.env` file
 ```
