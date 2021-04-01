@@ -29,7 +29,7 @@ Once the minimum is determined we will then check at liquity if we can redeem LU
 
 We can determine the arbitrage opportunity by the following formula.
 ```
-profit = ETH_USED * (uniswapPrice/chainLinkPrice) * (1-redemptionFeePercentage) - GasCost
+profit = ETH_USED * (uniswapPrice/chainLinkPrice) * (1-redemptionFeePercentage) * (1-uinswap_liquidity_provider_fee) - GasCost
 ```
 
 If we find that the profit is positive we will then invoke the smart contract.

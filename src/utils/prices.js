@@ -18,6 +18,7 @@ const WETH = new Token(ETH_NETWORK, ADDRESSES[NETWORK]['WETH'], 6);
 const ACCOUNT_ADDRESS = process.env.ACCOUNT_ADDRESS;
 const POINT_TWO_ETH = new BN('200000000000000000');
 const PART_OF_LIQUIDITY_POOL_TO_USE = new BN(8); // 8th of the liquidity reserve will be used (12.5%)
+const UNISWAP_LIQUIDITY_PROVIDER_FEE = 0.003;
 
 abiDecoder.addABI(TroveManagerABI);
 
@@ -31,7 +32,7 @@ const arbitrageStatus = async (provider, web3, wallet) => {
 
 	const priceRatio = uniswapPrice / chainLinkPrice;
 	const ethUsed = parseFloat(fromWei(ethForSwap, 'ether'));
-	const ethAfterArbitrage = ethUsed * priceRatio * (1 - redemptionFee);
+	const ethAfterArbitrage = ethUsed * priceRatio * (1 - redemptionFee) * (1 - UNISWAP_LIQUIDITY_PROVIDER_FEE);
 	const profit = ethAfterArbitrage - ethUsed;
 
 	if (profit > 0) {
@@ -42,7 +43,7 @@ const arbitrageStatus = async (provider, web3, wallet) => {
 
 		console.log('After Arbitrage(without fees): %d', priceRatio * ethUsed);
 		console.log('After arbitrage: %d eth', ethAfterArbitrage);
-		console.log('Total profit(inc gas cost): %d', profit);
+		console.log('Est. total profit(w/o gas): %d', profit);
 
 		return {
 			status: 1,
@@ -112,7 +113,7 @@ const fetchPrices = async (web3, trade, ethForSwap) => {
 
 const executeArbitrage = async (amountIn, populatedRedemption, profit, web3) => {
 	const decodedRedemptionInput = abiDecoder.decodeMethod(populatedRedemption.rawPopulatedTransaction.data);
-	console.log('Contract inputs \neth passed - ' + amountIn.toString() + 'Contract inputs are -');
+	console.log('\neth in call - ' + amountIn.toString() + '\nContract inputs are -');
 	console.log(decodedRedemptionInput);
 
 	const LIQUITY_ARBITRAGE_CONTRACT = new web3.eth.Contract(
@@ -142,7 +143,7 @@ const executeArbitrage = async (amountIn, populatedRedemption, profit, web3) => 
 
 	const data = tx.encodeABI();
 	const nonce = await web3.eth.getTransactionCount(ACCOUNT_ADDRESS);
-	gas = parseInt(gas * 1.2); // added extra gas incase tx fails.
+	gas = parseInt(gas * 1.2); // added extra gas incase tx est changes.
 
 	const txData = {
 		from: ACCOUNT_ADDRESS,
