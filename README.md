@@ -52,6 +52,9 @@ After this add your private keys and wallet addresses to .env file.
 ```
 yarn start
 ```
+Once the server is started you will need to ping `localhost:3000/subscribe` to start polling for prices. Without subscribing to events , the arbitrage bot will not work.
+
+You can unsubscribe from the ethereum events by hitting localhost:3000/unsubscribe.
 
 #### Sample `.env` file
 ```
