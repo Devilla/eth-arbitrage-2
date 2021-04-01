@@ -37,14 +37,21 @@ app.get('/subscribe', async (req, res) => {
 		})
 		.on('connected', function (subscriptionId) {
 			console.log(subscriptionId);
+			res.send('Subscribed to ethereum events. Will continously monitor for arbitrage opportunities!')
 		})
 		.on('error', console.error);
+	
 });
 
 app.get('/unsubscribe', async (req, res) => {
+	if (subscription == null) {
+		res.send('Subscribe first before unsubscribing')
+		return
+	}
 	subscription.unsubscribe(function (error, success) {
 		if (success) {
-			console.log('Successfully unsubscribed!');
+			console.log('Successfully unsubscribed!')
+			res.send('Unsubscribed')
 		}
 	});
 });
