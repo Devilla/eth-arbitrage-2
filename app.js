@@ -32,26 +32,29 @@ app.get('/subscribe', async (req, res) => {
 	subscription = webSocketWeb3.eth
 		.subscribe('newBlockHeaders', function (error, result) {
 			if (!error) {
-				performArbitrage();
+				performArbitrage().catch(function (error) {
+					console.log('There seems to be an error, will try again later. \n' + error);
+				});
 			}
 		})
 		.on('connected', function (subscriptionId) {
 			console.log(subscriptionId);
-			res.send('Subscribed to ethereum events. Will continously monitor for arbitrage opportunities!')
+			res.send(
+				'Subscribed to ethereum events. Will continously monitor for arbitrage opportunities!'
+			);
 		})
 		.on('error', console.error);
-	
 });
 
 app.get('/unsubscribe', async (req, res) => {
 	if (subscription == null) {
-		res.send('Subscribe first before unsubscribing')
-		return
+		res.send('Subscribe first before unsubscribing');
+		return;
 	}
 	subscription.unsubscribe(function (error, success) {
 		if (success) {
-			console.log('Successfully unsubscribed!')
-			res.send('Unsubscribed')
+			console.log('Successfully unsubscribed!');
+			res.send('Unsubscribed');
 		}
 	});
 });
@@ -62,7 +65,12 @@ const performArbitrage = async () => {
 
 		status = await arbitrageStatus(jsonRpcProvider, webSocketWeb3, wallet);
 		if (status['status'] == 1) {
-			await executeArbitrage(status['amountIn'], status['populatedRedemption'], status['profit'], webSocketWeb3);
+			await executeArbitrage(
+				status['amountIn'],
+				status['populatedRedemption'],
+				status['profit'],
+				webSocketWeb3
+			);
 		}
 
 		store.set(ONGOING_STATUS, false);

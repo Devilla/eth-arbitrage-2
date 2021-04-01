@@ -27,12 +27,21 @@ const arbitrageStatus = async (provider, web3, wallet) => {
 
 	const pair = await Fetcher.fetchPairData(LUSD, WETH, provider);
 
-	const { trade, ethForSwap, populatedRedemption } = await getFeasibleTrade(liquity, pair, wallet);
-	const { uniswapPrice, chainLinkPrice, redemptionFee } = await fetchPrices(web3, trade, ethForSwap);
+	const { trade, ethForSwap, populatedRedemption } = await getFeasibleTrade(
+		liquity,
+		pair,
+		wallet
+	);
+	const { uniswapPrice, chainLinkPrice, redemptionFee } = await fetchPrices(
+		web3,
+		trade,
+		ethForSwap
+	);
 
 	const priceRatio = uniswapPrice / chainLinkPrice;
 	const ethUsed = parseFloat(fromWei(ethForSwap, 'ether'));
-	const ethAfterArbitrage = ethUsed * priceRatio * (1 - redemptionFee) * (1 - UNISWAP_LIQUIDITY_PROVIDER_FEE);
+	const ethAfterArbitrage =
+		ethUsed * priceRatio * (1 - redemptionFee) * (1 - UNISWAP_LIQUIDITY_PROVIDER_FEE);
 	const profit = ethAfterArbitrage - ethUsed;
 
 	if (profit > 0) {
@@ -62,7 +71,9 @@ const arbitrageStatus = async (provider, web3, wallet) => {
 };
 
 const getFeasibleTrade = async (liquity, pair, wallet) => {
-	const ethUniswapReserve = toBN(toWei(pair.reserve0.toSignificant(8), 'Mwei')).div(PART_OF_LIQUIDITY_POOL_TO_USE);
+	const ethUniswapReserve = toBN(toWei(pair.reserve0.toSignificant(8), 'Mwei')).div(
+		PART_OF_LIQUIDITY_POOL_TO_USE
+	);
 	const ethBalanceInWallet = toBN((await wallet.getBalance()).toString());
 
 	let ethTradeAmout;
@@ -79,7 +90,9 @@ const getFeasibleTrade = async (liquity, pair, wallet) => {
 	const populatedRedemption = await liquity.populate
 		.redeemLUSD(lusdObtainedFromUni.toString())
 		.catch(function (error) {
-			console.log('possibly wallet does not contain any LUSD. Keep a standing balance' + error);
+			console.log(
+				'possibly wallet does not contain any LUSD. Keep a standing balance' + error
+			);
 		});
 
 	let redeemableLusdAmount = toWei(populatedRedemption.redeemableLUSDAmount.toString(), 'ether');
@@ -112,28 +125,19 @@ const fetchPrices = async (web3, trade, ethForSwap) => {
 };
 
 const executeArbitrage = async (amountIn, populatedRedemption, profit, web3) => {
-	const decodedRedemptionInput = abiDecoder.decodeMethod(populatedRedemption.rawPopulatedTransaction.data);
-	console.log('\neth in call - ' + amountIn.toString() + '\nContract inputs are -');
-	console.log(decodedRedemptionInput);
-
-	const LIQUITY_ARBITRAGE_CONTRACT = new web3.eth.Contract(
-		arbitrageContractABI,
-		ADDRESSES[NETWORK]['LIQUITY_ARBITRAGE']
-	);
-	const tx = LIQUITY_ARBITRAGE_CONTRACT.methods.ethToLusdAndBackArbitrage(
-		decodedRedemptionInput['params'][0]['value'],
-		decodedRedemptionInput['params'][1]['value'],
-		decodedRedemptionInput['params'][2]['value'],
-		decodedRedemptionInput['params'][3]['value'],
-		decodedRedemptionInput['params'][4]['value'],
-		decodedRedemptionInput['params'][5]['value'],
-		decodedRedemptionInput['params'][6]['value']
+	const decodedRedemptionInput = abiDecoder.decodeMethod(
+		populatedRedemption.rawPopulatedTransaction.data
 	);
 
-	let gas = await tx.estimateGas({ from: ACCOUNT_ADDRESS, value: amountIn.toString() }).catch(function (error) {
-		console.log('The transaction will fail. Wait for a different opportunity' + error);
-	});
-	const gasPrice = await web3.eth.getGasPrice();
+	const { tx, liquityArbitrageContract } = await constructTx(
+		amountIn,
+		decodedRedemptionInput,
+		profit,
+		web3
+	);
+
+	let { gas, gasPrice } = await getGasPriceForTx(tx, amountIn, web3);
+
 	const gasCost = parseFloat(fromWei(toBN(gas).mul(toBN(gasPrice)), 'ether'));
 
 	if (profit - gasCost < 0) {
@@ -147,7 +151,7 @@ const executeArbitrage = async (amountIn, populatedRedemption, profit, web3) => 
 
 	const txData = {
 		from: ACCOUNT_ADDRESS,
-		to: LIQUITY_ARBITRAGE_CONTRACT.options.address,
+		to: liquityArbitrageContract.options.address,
 		data: data,
 		value: amountIn.toString(),
 		gas,
@@ -165,6 +169,36 @@ const executeArbitrage = async (amountIn, populatedRedemption, profit, web3) => 
 		.catch(function (error) {
 			console.log('The transaction Failed' + error);
 		});
+};
+
+const constructTx = async (amountIn, decodedRedemptionInput, profit, web3) => {
+	const liquityArbitrageContract = new web3.eth.Contract(
+		arbitrageContractABI,
+		ADDRESSES[NETWORK]['LIQUITY_ARBITRAGE']
+	);
+	const tx = liquityArbitrageContract.methods.ethToLusdAndBackArbitrage(
+		decodedRedemptionInput['params'][0]['value'],
+		decodedRedemptionInput['params'][1]['value'],
+		decodedRedemptionInput['params'][2]['value'],
+		decodedRedemptionInput['params'][3]['value'],
+		decodedRedemptionInput['params'][4]['value'],
+		decodedRedemptionInput['params'][5]['value'],
+		decodedRedemptionInput['params'][6]['value']
+	);
+
+	return { tx: tx, liquityArbitrageContract: liquityArbitrageContract };
+};
+
+const getGasPriceForTx = async (tx, amountIn, web3) => {
+	let gas = await tx
+		.estimateGas({ from: ACCOUNT_ADDRESS, value: amountIn.toString() })
+		.catch(function (error) {
+			console.log('The transaction will fail. Wait for a different opportunity' + error);
+		});
+
+	const gasPrice = await web3.eth.getGasPrice();
+
+	return { gas: gas, gasPrice: gasPrice };
 };
 
 exports.arbitrageStatus = arbitrageStatus;

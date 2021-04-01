@@ -73,3 +73,8 @@ Converted 0.778 ETH to 0.833 ETH  ( 0.778 was choosen based on the wallet balanc
 
 Tx on block: https://kovan.etherscan.io/tx/0xc544d95f30b02e606f33d08c394b73ed1832d278e813fdde93236f6aaf8fd755  
 Converted 1.01 eth to 1.05 eth & 900(wei) LUSD (1.01 eth was choosen based on the uniswap pool reserve )
+
+* [Converted 0.778 ETH to 0.833 ETH](https://kovan.etherscan.io/tx/0xe71c1f51a90a39088073e8b66a9880e1b2c766046c95e3aa3e1814eca7a3b527) ( 0.778 was choosen based on the wallet balance )
+* [Converted 1.01 eth to 1.05 eth & 900(wei) LUSD](https://kovan.etherscan.io/tx/0xc544d95f30b02e606f33d08c394b73ed1832d278e813fdde93236f6aaf8fd755) (1.01 eth was choosen based on the uniswap pool reserve )
+* [Converted 0.771 eth to 1.08 eth & 1860(wei) LUSD](https://kovan.etherscan.io/tx/0xe80ed8aea2f845dfcf9eb30ea834ffc6fb61f1b5bccbcfbdc217ea9dc761f45f)
+* [Converted 0.863 eth to 0.94 eth & 324(wei) LUSD](https://kovan.etherscan.io/tx/0xd226660d149e239d748e4ad87d41654d5a96f03eb2a2aab25381c39aea548fb7)
