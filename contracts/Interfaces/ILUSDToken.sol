@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.11;
+pragma solidity ^0.6.11;
 
-import "../IERC20.sol";
-import "../IERC2612.sol";
+import "./IERC20.sol";
+import "./IERC2612.sol";
 
 interface ILUSDToken is IERC20, IERC2612 { 
     

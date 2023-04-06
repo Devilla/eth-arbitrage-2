@@ -8,9 +8,9 @@ const { toWei, fromWei, toBN } = require('web3-utils/src/index.js');
 const abiDecoder = require('abi-decoder');
 const BN = require('bn.js');
 
-const ETH_NETWORK = ChainId.KOVAN;
-const NETWORK = 'KOVAN';
-const CHAIN = 'kovan';
+const ETH_NETWORK = ChainId.GÖRLI;
+const NETWORK = 'GOERLI';
+const CHAIN = 'Goerli';
 const HARDFORK = 'petersburg';
 const LUSD = new Token(ETH_NETWORK, ADDRESSES[NETWORK]['LUSD'], 6);
 const WETH = new Token(ETH_NETWORK, ADDRESSES[NETWORK]['WETH'], 6);

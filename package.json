@@ -18,6 +18,7 @@
     "@ethersproject/solidity": "^5.0.10",
     "@liquity/lib-base": "^2.0.2",
     "@liquity/lib-ethers": "^2.0.0",
+    "@truffle/hdwallet-provider": "^2.1.9",
     "@uniswap/sdk": "^3.0.3",
     "abi-decoder": "^2.4.0",
     "concurrently": "^6.0.0",

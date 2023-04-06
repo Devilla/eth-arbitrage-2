@@ -3,9 +3,9 @@
 pragma solidity ^0.6.6;
 
 import './Interfaces/IUniswapV2Router02.sol';
-import './Interfaces/IUniswapV2Pair.sol';
+// import './Interfaces/IUniswapV2Pair.sol';
 import './Interfaces/IUniswapV2Factory.sol';
-import './Interfaces/IUniswapV2ERC20.sol';
+// import './Interfaces/IUniswapV2ERC20.sol';
 import './Interfaces/ILUSDToken.sol';
 import './Interfaces/ITroveManager.sol';
 
