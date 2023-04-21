@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Project to perform arbitrages of LUSD",
   "main": "index.js",
-  "author": "Gautam G Sabhahit",
+  "author": "Dev Yadav",
   "scripts": {
     "start": "node app.js"
   },

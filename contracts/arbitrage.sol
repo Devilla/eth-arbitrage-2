@@ -17,7 +17,7 @@ contract arbitrage {
     
     event CurrentBalance(uint256 ethBalance, uint256 _LUSDAmount);
     
-    constructor(address _router,address _lusd, address _troveManager) public {
+    constructor(address _router, address _lusd, address _troveManager) public {
         owner = msg.sender;
         uniRouter = IUniswapV2Router02(_router);
         LUSD = ILUSDToken(_lusd);
