@@ -1,4 +1,4 @@
-# liquity-arbitrage
+# Trag-Liq
 
 This project will perform an arbitrage of LUSD/ETH pair. This will be done by 2 steps
 1. Swap ETH for LUSD at uniswap 
