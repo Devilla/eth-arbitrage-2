@@ -46,7 +46,7 @@ To run the server 24/7 we will need a poller mechanism which will continously mo
 Run the following commands
 ```
 > npm
-> cp node_modules/@liquity/lib-ethers/deployments/default/kovan.json node_modules/@liquity/lib-ethers/dist/deployments/dev.json 
+> cp node_modules/@liquity/lib-ethers/deployments/default/goerli.json node_modules/@liquity/lib-ethers/dist/deployments/dev.json 
 ```
 
 After this add your private keys and wallet addresses to .env file.
@@ -55,17 +55,15 @@ After this add your private keys and wallet addresses to .env file.
 ```
 npm start
 ```
-Once the server is started you will need to ping `localhost:3000/subscribe` to start polling for prices. Without subscribing to events , the arbitrage bot will not work.
-
-You can unsubscribe from the ethereum events by hitting `localhost:3000/unsubscribe`.
+Once the server is started you will need to ping `localhost:3000` to start polling for prices.
 
 ###### Note: We use redeemLUSD function to determine the input values for the smart contract inputs, to run the redeemLUSD we need LUSD present in our wallet. So keep a amount of LUSD equivalent to the ETH in your wallet or the amount being arbitraged for. 
 
 #### Sample `.env` file
 ```
 PRIVATE_KEY='PVT_KEY_FROM_WALLET'
-WSS_PROVIDER='wss://kovan.infura.io/ws/v3/API_KEY'
-HTTPS_PROVIDER='https://kovan.infura.io/v3/API_KEY'
+WSS_PROVIDER='wss://goerli.infura.io/ws/v3/API_KEY'
+HTTPS_PROVIDER='https://goerli.infura.io/v3/API_KEY'
 ACCOUNT_ADDRESS='WALLET_ADDRESS_OF_THE_PRIVATE_KEY'
 ```
 
