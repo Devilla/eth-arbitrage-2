@@ -1,4 +1,4 @@
-# Trag-Liq
+# Eth-Arbitrage 2.0
 
 This project will perform an arbitrage of LUSD/ETH pair. This will be done by 2 steps
 1. Swap ETH for LUSD at uniswap 
@@ -67,7 +67,7 @@ HTTPS_PROVIDER='https://goerli.infura.io/v3/API_KEY'
 ACCOUNT_ADDRESS='WALLET_ADDRESS_OF_THE_PRIVATE_KEY'
 ```
 
-#Author
+# Author
 
 [Dev Yadav](https://github.com/Devilla)
 
