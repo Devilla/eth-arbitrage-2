@@ -10,13 +10,8 @@ import './Interfaces/ITroveManager.sol';
 
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 
-
-
-
-
 contract arbitrage {
   
-
     IUniswapV2Router02 public uniRouter;
     ILUSDToken public LUSD;
     ITroveManager public troveManager;
